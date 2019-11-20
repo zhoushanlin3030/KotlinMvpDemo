@@ -1,7 +1,8 @@
-package com.example.zsl
+package com.example.zsl.mvp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.zsl.R
 
 class MainActivity : AppCompatActivity() {
 
