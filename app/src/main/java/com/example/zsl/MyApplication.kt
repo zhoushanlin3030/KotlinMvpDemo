@@ -7,12 +7,17 @@ import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
+import kotlin.properties.Delegates
 
 class MyApplication : Application() {
 
     private var mRefWatcher : RefWatcher ?= null
 
     companion object {
+
+        var context : Context by Delegates.notNull()
+        private set
+
         fun getRefWatcher(context : Context) : RefWatcher?{
             val myApplication = context.applicationContext as MyApplication
             return myApplication.mRefWatcher
