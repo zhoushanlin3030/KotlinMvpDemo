@@ -1,9 +1,12 @@
 package com.example.zsl.net
 
 import com.example.zsl.MyApplication
+import com.example.zsl.api.ApiService
 import com.example.zsl.api.UrlConstant
 import com.example.zsl.utils.NetworkUtil
 import com.example.zsl.utils.Preference
+import io.reactivex.Observable
+import io.reactivex.functions.Consumer
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,9 +17,12 @@ import java.util.concurrent.TimeUnit
 
 object RetrofiManager {
 
-
+    val service : ApiService by lazy (LazyThreadSafetyMode.SYNCHRONIZED){
+        getRetrofit().create(ApiService::class.java)
+    }
 
    private var token:String by Preference("token","")
+
 
    /**
     * 设置公共参数
