@@ -5,7 +5,7 @@ import io.reactivex.disposables.Disposable
 import java.lang.Exception
 
 
-class BasePresenter<T : IBaseView> : IBasePresenter<T> {
+abstract class BasePresenter<T : IBaseView> : IBasePresenter<T> {
 
     var mRootView : T ?= null
 

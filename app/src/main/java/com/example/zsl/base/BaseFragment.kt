@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.classic.common.MultipleStatusView
+import com.trello.rxlifecycle2.components.support.RxFragment
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.StringBuilder
 
-abstract class BaseFragment : Fragment(),EasyPermissions.PermissionCallbacks{
+abstract class BaseFragment : RxFragment(),EasyPermissions.PermissionCallbacks{
 
     //界面是否加载完成
     private var mViewInflateFinish = false

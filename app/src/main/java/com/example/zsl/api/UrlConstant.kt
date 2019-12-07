@@ -9,5 +9,18 @@ package com.example.zsl.api
  * Version 1.0
  */
 object UrlConstant {
+	/**
+	 * api地址
+	 */
 	const val BASE_URL = "http://baobab.kaiyanapp.com/api/"
+
+	/**
+	 *文件根目录
+	 */
+	const val ROOT_FILE = "zsl"
+
+	/**
+	 * crash目录
+	 */
+	const val CRASH_FILE = "crash"
 }

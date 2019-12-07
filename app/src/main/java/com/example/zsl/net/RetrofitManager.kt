@@ -5,8 +5,6 @@ import com.example.zsl.api.ApiService
 import com.example.zsl.api.UrlConstant
 import com.example.zsl.utils.NetworkUtil
 import com.example.zsl.utils.Preference
-import io.reactivex.Observable
-import io.reactivex.functions.Consumer
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,8 +12,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.java
 
-object RetrofiManager {
+
+object RetrofitManager {
 
     val service : ApiService by lazy (LazyThreadSafetyMode.SYNCHRONIZED){
         getRetrofit().create(ApiService::class.java)
@@ -90,13 +90,13 @@ object RetrofiManager {
    private fun getRetrofit() : Retrofit {
       return Retrofit.Builder()
               .baseUrl(UrlConstant.BASE_URL)
-              .client(getOkhttpClient())
+              .client(getOkHttpClient())
               .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
               .addConverterFactory(GsonConverterFactory.create())
               .build()
    }
 
-   private fun getOkhttpClient() : OkHttpClient {
+   private fun getOkHttpClient() : OkHttpClient {
 
       val httpLoggingInterceptor = HttpLoggingInterceptor()
       httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -109,10 +109,11 @@ object RetrofiManager {
               .addInterceptor(addHeaderInterceptor())
               .addInterceptor(addCacheInterceptor())
               .cache(cache)
-              .writeTimeout(30L,TimeUnit.SECONDS)
+              .writeTimeout(30L, TimeUnit.SECONDS)
               .readTimeout(30L,TimeUnit.SECONDS)
               .connectTimeout(30L,TimeUnit.SECONDS)
               .build()
    }
 
 }
+

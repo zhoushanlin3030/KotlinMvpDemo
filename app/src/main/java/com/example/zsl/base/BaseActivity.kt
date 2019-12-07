@@ -1,14 +1,22 @@
 package com.example.zsl.base
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import com.classic.common.MultipleStatusView
+import com.example.zsl.widget.LoadingDialog
+import com.trello.rxlifecycle2.LifecycleTransformer
+import com.trello.rxlifecycle2.android.ActivityEvent
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.StringBuilder
 
-abstract class BaseActivity : AppCompatActivity(),EasyPermissions.PermissionCallbacks{
+abstract class BaseActivity<V:IBaseView,P:IBasePresenter<V>> : RxAppCompatActivity(),EasyPermissions.PermissionCallbacks,IBaseView{
+
+    var mPresenter : P ?= null
+
+    var loadingDialog : Dialog ?= null
 
     /**
      * 多状态view切换
@@ -18,6 +26,8 @@ abstract class BaseActivity : AppCompatActivity(),EasyPermissions.PermissionCall
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId())
+        initPresenter()
+        mPresenter?.attachView(this as V)
         initData()
         initView()
         startRequest()
@@ -38,6 +48,11 @@ abstract class BaseActivity : AppCompatActivity(),EasyPermissions.PermissionCall
     abstract fun layoutId() : Int
 
     /**
+     * P层实例初始化
+     */
+    abstract fun initPresenter() : P
+
+    /**
      * 数据初始化
      */
     abstract fun initData()
@@ -52,6 +67,24 @@ abstract class BaseActivity : AppCompatActivity(),EasyPermissions.PermissionCall
      */
     abstract fun startRequest()
 
+    override fun showLoading() {
+        loadingDialog = LoadingDialog.show(this,loadingDialog)
+    }
+
+    override fun hideLoading() {
+        loadingDialog ?.let {
+            loadingDialog!!.setOnDismissListener(null)
+        }
+        LoadingDialog.dismiss(loadingDialog)
+    }
+
+    override fun <T> bindToLifecycleDestory(): LifecycleTransformer<T> {
+        return bindUntilEvent(ActivityEvent.DESTROY)
+    }
+
+    override fun <T> bindToDefaultLifecycle(): LifecycleTransformer<T> {
+        return bindToLifecycle()
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -83,4 +116,13 @@ abstract class BaseActivity : AppCompatActivity(),EasyPermissions.PermissionCall
                 .show()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (mPresenter != null){
+            mPresenter!!.detachView()
+            mPresenter = null
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.zsl
 
 import android.app.Application
 import android.content.Context
+import com.example.zsl.utils.CrashLogUtil
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -51,5 +52,7 @@ class MyApplication : Application() {
                 return BuildConfig.DEBUG
             }
         })
+
+        CrashLogUtil.instance.init(this)
     }
 }
